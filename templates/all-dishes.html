@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directory</title>
+</head>
+
+<body>
+    <ul>
+        {% for dish in all_dishes %}
+        <li>
+
+            <h5>
+                <a href="/dishes/{{dish.id}}">{{dish.name}}</a>
+            </h5>
+            <img src="{{dish.image_url}}" alt="">
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
