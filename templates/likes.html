@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>My Saved Recipes</h1>
+    <ul>
+        {% for dish in dishes %}
+        <li>
+            <a href="/dishes/{{dish.id}}">
+                {{dish.name}}
+            </a>
+            <form method="POST" action="/dishes/{{dish.id}}/remove">
+                <button>
+                    Remove
+                </button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,17 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ingredient.name}}</title>
-</head>
+{% extends 'base.html' %}
+{% block content %}
+<h5>
+    <a href="/">Home</a> > <a href="/ingredients/all">Ingredient</a> > {{ingredient.name}}
+</h5>
 
-<body>
-    <h1>
-        Page for {{ingredient.name}}
-    </h1>
-</body>
+<h1>
+    Page for {{ingredient.name}}
+</h1>
+<h3>Description</h3>
+<p>{{ingredient.description}}</p>
 
-</html>
+<h3>Used In:</h3>
+{% for dish in used_in %}
+<ul>
+    <a href="/dishes/{{dish.id}}">{{dish.name}} </a>
+</ul>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul>
+    {% for i in all_ingredients %}
+    <li>
+        <a href="/ingredients/{{i.id}}">{{i.name}}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
