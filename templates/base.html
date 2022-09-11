@@ -14,8 +14,12 @@
     {% if not g.user %}
     <a href="/sign-up">Create Account</a>
     <a href="/login">Log In</a>
+
     {% else %}
     <a href="/my-recipes">Saved Recipes</a>
+    {% if g.user.admin_status %}
+    <a href="/users">Users</a>
+    {% endif %}
     <a href="/logout">Log out</a>
     {% endif %}
 

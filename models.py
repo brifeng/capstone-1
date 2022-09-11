@@ -1,3 +1,4 @@
+from cProfile import run
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 
@@ -60,7 +61,7 @@ class User(db.Model):
     password = db.Column(db.Text, nullable=False)
     admin_status = db.Column(db.Boolean, default=False)
 
-    likes = db.relationship('Dish', secondary="likes")
+    likes = db.relationship("Dish", secondary="likes")
 
     @classmethod
     def signup(cls, username, password, admin_status=False):
@@ -71,11 +72,7 @@ class User(db.Model):
 
         hashed_pwd = bcrypt.generate_password_hash(password).decode("UTF-8")
 
-        user = User(
-            username=username,
-            password=hashed_pwd,
-            admin_status=admin_status
-        )
+        user = User(username=username, password=hashed_pwd, admin_status=admin_status)
 
         db.session.add(user)
         return user
@@ -99,6 +96,10 @@ class User(db.Model):
                 return user
 
         return False
+
+    @classmethod
+    def update_db(cls):
+        exec(open("update.py").read())
 
 
 class Likes(db.Model):

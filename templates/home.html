@@ -3,8 +3,16 @@
 
 <h1>Welcome to the Cooking App</h1>
 
-<a href="/dishes/all">View All Dishes</a>
-<a href="/ingredients/all">View All Ingredients</a>
+<a href="/dishes">View All Dishes</a>
+<a href="/ingredients">View All Ingredients</a>
 
+<form action="/dishes">
+    <input name="q" placeholder="Search Dishes" id="search-dish">
+    <button> Search </button>
+</form>
 
+<form action="/ingredients">
+    <input name="q" placeholder="Search Ingredients" id="search-ingredient">
+    <button> Search </button>
+</form>
 {% endblock %}

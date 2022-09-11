@@ -43,7 +43,7 @@ def show_dish(id):
             .filter(Likes.user_id == g.user.id, Likes.dish_id == id)
             .one_or_none()
         )
-    # pdb.set_trace()
+
     return render_template(
         "dish.html",
         dish=dish,
@@ -52,11 +52,16 @@ def show_dish(id):
     )
 
 
-@app.route("/dishes/all")
+@app.route("/dishes")
 def show_all_dishes():
-    all_dishes = Dish.query.all()
+    search = request.args.get("q")
 
-    return render_template("all-dishes.html", all_dishes=all_dishes)
+    if not search:
+        dishes = Dish.query.all()
+    else:
+        dishes = Dish.query.filter(Dish.name.ilike(f"%{search}%")).all()
+
+    return render_template("all-dishes.html", all_dishes=dishes)
 
 
 @app.route("/ingredients/<int:id>")
@@ -64,17 +69,25 @@ def show_ingredient(id):
     ingredient = Ingredient.query.get_or_404(id)
 
     used_in = (
-        db.session.query(Dish).filter(Recipe.ingredient_id == 1).join(Recipe).all()
+        db.session.query(Dish).filter(Recipe.ingredient_id == id).join(Recipe).all()
     )
 
     return render_template("ingredient.html", ingredient=ingredient, used_in=used_in)
 
 
-@app.route("/ingredients/all")
+@app.route("/ingredients")
 def show_all_ingredients():
-    all_ingredients = Ingredient.query.all()
 
-    return render_template("all-ingredients.html", all_ingredients=all_ingredients)
+    search = request.args.get("q")
+
+    if not search:
+        ingredients = Ingredient.query.all()
+    else:
+        ingredients = Ingredient.query.filter(
+            Ingredient.name.ilike(f"%{search}%")
+        ).all()
+
+    return render_template("all-ingredients.html", all_ingredients=ingredients)
 
 
 @app.route("/sign-up", methods=["GET", "POST"])
@@ -199,3 +212,39 @@ def remove_recipe(id):
     db.session.commit()
 
     return redirect("/my-recipes")
+
+
+@app.route("/users")
+def view_users():
+
+    if not g.user.admin_status:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    users = User.query.all()
+    return render_template("users.html", users=users)
+
+
+@app.route("/users/promote/<int:id>", methods=["POST"])
+def promote(id):
+
+    if not g.user.admin_status:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    user = User.query.get(id)
+
+    user.admin_status = True
+    db.session.commit()
+
+    return redirect("/users")
+
+
+@app.route("/update")
+def update_db():
+    if not g.user.admin_status:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    g.user.update_db()
+    flash(f"Updated database!", "success")
+    return redirect("/")
