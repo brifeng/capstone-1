@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% block content %}
 <h5>
@@ -8,13 +7,24 @@
 <h1>
     Page for {{ingredient.name}}
 </h1>
+{% if ingredient.description %}
 <h3>Description</h3>
 <p>{{ingredient.description}}</p>
+{% endif %}
 
 <h3>Used In:</h3>
-{% for dish in used_in %}
-<ul>
-    <a href="/dishes/{{dish.id}}">{{dish.name}} </a>
-</ul>
-{% endfor %}
+<div class="container">
+    <div class="row">
+        {% for dish in used_in %}
+        <div class="card" style="width: 11rem">
+            <img src="{{dish.image_url}}" alt="Picture of {{dish.name}}" class="card-img-top">
+            <div class="card-body">
+                <h5>
+                    <a href="/dishes/{{dish.id}}" class="btn stretched-link">{{dish.name}}</a>
+                </h5>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

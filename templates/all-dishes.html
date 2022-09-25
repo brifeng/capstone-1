@@ -1,13 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
-<ul>
+
+<h5>
+    <a href="/">Home</a> > Dishes
+</h5>
+
+<div class="row full-width">
+
     {% for dish in all_dishes %}
-    <li>
-        <h5>
-            <a href="/dishes/{{dish.id}}">{{dish.name}}</a>
-        </h5>
-        <img src="{{dish.image_url}}" alt="">
-    </li>
+    <div class="card" style="width: 18rem">
+        <img src="{{dish.image_url}}" alt="Picture of {{dish.name}}" class="card-img-top">
+        <div class="card-body">
+            <h5>
+                <a href="/dishes/{{dish.id}}" class="btn stretched-link">{{dish.name}}</a>
+            </h5>
+        </div>
+    </div>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}

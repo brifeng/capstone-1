@@ -43,12 +43,14 @@ def show_dish(id):
             .filter(Likes.user_id == g.user.id, Likes.dish_id == id)
             .one_or_none()
         )
-
+        return render_template(
+            "dish.html",
+            dish=dish,
+            ingredients_list=ingredients_list,
+            like=True if (likes is not None) else False,
+        )
     return render_template(
-        "dish.html",
-        dish=dish,
-        ingredients_list=ingredients_list,
-        like=True if (likes is not None) else False,
+        "dish-anon.html", dish=dish, ingredients_list=ingredients_list
     )
 
 
@@ -57,7 +59,7 @@ def show_all_dishes():
     search = request.args.get("q")
 
     if not search:
-        dishes = Dish.query.all()
+        dishes = Dish.query.order_by("name").all()
     else:
         dishes = Dish.query.filter(Dish.name.ilike(f"%{search}%")).all()
 
@@ -186,13 +188,14 @@ def show_likes():
 @app.route("/dishes/<int:id>/save", methods=["POST"])
 def save_recipe(id):
     if not g.user:
-        flash("Access unauthorized.", "danger")
+        flash("Access unauthorized. Please log in to save.", "danger")
         return redirect(f"/dishes/{id}")
 
     like = Likes(user_id=g.user.id, dish_id=id)
     db.session.add(like)
     db.session.commit()
 
+    flash("Dish saved!", "success")
     return redirect(f"/dishes/{id}")
 
 
@@ -214,18 +217,18 @@ def remove_recipe(id):
     return redirect("/my-recipes")
 
 
-@app.route("/users")
-def view_users():
+@app.route("/admin")
+def view_admin():
 
     if not g.user.admin_status:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
     users = User.query.all()
-    return render_template("users.html", users=users)
+    return render_template("admin.html", users=users)
 
 
-@app.route("/users/promote/<int:id>", methods=["POST"])
+@app.route("/admin/promote/<int:id>", methods=["POST"])
 def promote(id):
 
     if not g.user.admin_status:
@@ -237,7 +240,7 @@ def promote(id):
     user.admin_status = True
     db.session.commit()
 
-    return redirect("/users")
+    return redirect("/admin")
 
 
 @app.route("/update")
@@ -246,5 +249,5 @@ def update_db():
         flash("Access unauthorized.", "danger")
         return redirect("/")
     g.user.update_db()
-    flash(f"Updated database!", "success")
+    flash(f"Updated database.", "success")
     return redirect("/")

@@ -5,7 +5,7 @@
 <ul>
     {% for user in users %}
     <li>
-        <form method="post" action="/users/promote/{{user.id}}">
+        <form method="post" action="/admin/promote/{{user.id}}">
             {{user.username}} {{user.admin_status}}
             <button>Promote</button>
         </form>
@@ -13,4 +13,6 @@
     {% endfor %}
 </ul>
 
+<h1>API Update</h1>
+<a href="/update">Go</a>
 {% endblock %}

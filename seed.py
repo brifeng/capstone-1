@@ -8,7 +8,7 @@ db.create_all()
 
 
 # Dishes data
-f = open("dishes.json")
+f = open("json/dishes.json")
 data = json.load(f)
 
 for i in data["meals"]:
@@ -24,7 +24,7 @@ for i in data["meals"]:
 
 
 # Ingredients data
-g = open("ingredients.json")
+g = open("json/ingredients.json")
 ingredients_data = json.load(g)
 
 for i in ingredients_data["meals"]:

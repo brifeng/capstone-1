@@ -57,7 +57,7 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(20), nullable=False)
+    username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
     admin_status = db.Column(db.Boolean, default=False)
 
